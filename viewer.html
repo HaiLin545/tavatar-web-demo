@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <!-- <script src="/sw.js"></script> -->
+    <title>3D Gaussian Splat Demo - Human</title>
+    <link rel="stylesheet" href="src/viewer-gui.css" />
+  </head>
+
+  <body>
+    <!-- 超紧凑GUI面板 -->
+    <div class="compact-gui" id="compactGui">
+      <button class="toggle-btn" onclick="toggleGUI()" title="Collapse/Expand">
+        ×
+      </button>
+      <div class="gui-title">
+        <span>🎮</span>
+        Control Panel
+      </div>
+
+      <div class="gui-content" id="guiContent">
+        <div class="control-section">
+          <h5>Display Mode:</h5>
+
+          <div class="gui-row">
+            <input
+              type="radio"
+              id="display3DGS"
+              class="gui-radio"
+              name="displayMode"
+              value="3dgs"
+              onchange="updateDisplayMode()"
+              checked
+            />
+            <label for="display3DGS" style="min-width: auto; font-size: 8px"
+              >3DGS</label
+            >
+          </div>
+
+          <div class="gui-row">
+            <input
+              type="radio"
+              id="display3DGSEllipsoid"
+              class="gui-radio"
+              name="displayMode"
+              value="3dgs-ellipsoid"
+              onchange="updateDisplayMode()"
+            />
+            <label
+              for="display3DGSEllipsoid"
+              style="min-width: auto; font-size: 8px"
+              >3DGS-Ellipsoid</label
+            >
+          </div>
+
+          <div class="gui-row">
+            <input
+              type="radio"
+              id="displayMesh"
+              class="gui-radio"
+              name="displayMode"
+              value="mesh"
+              onchange="updateDisplayMode()"
+            />
+            <label for="displayMesh" style="min-width: auto; font-size: 8px"
+              >Mesh</label
+            >
+          </div>
+
+          <div class="gui-row">
+            <input
+              type="radio"
+              id="displayMeshFrame"
+              class="gui-radio"
+              name="displayMode"
+              value="mesh-frame"
+              onchange="updateDisplayMode()"
+            />
+            <label
+              for="displayMeshFrame"
+              style="min-width: auto; font-size: 8px"
+              >Mesh-Frame</label
+            >
+          </div>
+
+          <div class="gui-row">
+            <input
+              type="radio"
+              id="displayCombo"
+              class="gui-radio"
+              name="displayMode"
+              value="combo"
+              onchange="updateDisplayMode()"
+            />
+            <label for="displayCombo" style="min-width: auto; font-size: 8px"
+              >3DGS-Ellipsoid + Mesh-Frame</label
+            >
+          </div>
+
+          <div
+            class="gui-row"
+            style="
+              border-top: 1px solid rgba(255, 255, 255, 0.1);
+              margin-top: 8px;
+              padding-top: 6px;
+            "
+          >
+            <input
+              type="checkbox"
+              id="autoRotate"
+              class="gui-checkbox"
+              onchange="toggleAutoRotation()"
+            />
+            <label for="autoRotate" style="min-width: auto; font-size: 8px"
+              >Auto Rotate</label
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

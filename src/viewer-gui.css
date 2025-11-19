@@ -1,0 +1,157 @@
+body {
+    height: 100vh;
+    margin: 0px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #000;
+    overflow: hidden;
+    /* 防止页面滚动条 */
+}
+
+/* 超紧凑的GUI面板 */
+.compact-gui {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(25, 25, 25, 0.95);
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 120px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+}
+
+.gui-title {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #4a90e2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.gui-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    gap: 0px;
+}
+
+.gui-row label {
+    min-width: 40px;
+    font-size: 9px;
+    color: #ccc;
+}
+
+.gui-select,
+.gui-input {
+    padding: 2px 4px;
+    border: 1px solid #555;
+    border-radius: 3px;
+    width: 100px;
+    background: rgba(40, 40, 40, 0.9);
+    color: white;
+    font-size: 9px;
+}
+
+.gui-select:focus,
+.gui-input:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+.gui-checkbox,
+.gui-radio {
+    margin-left: 5px;
+    transform: scale(0.8);
+}
+
+.gui-button {
+    width: 100%;
+    padding: 4px;
+    margin-top: 6px;
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 9px;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.gui-button:hover {
+    background: linear-gradient(135deg, #357abd, #2563b8);
+    transform: translateY(-1px);
+}
+
+.toggle-btn {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.compact-gui.collapsed {
+    transform: translateX(-75%);
+}
+
+.compact-gui.collapsed .gui-content {
+    display: none;
+}
+
+.control-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 8px;
+    padding-top: 6px;
+}
+
+.control-section h5 {
+    margin: 0 0 4px 0;
+    font-size: 9px;
+    color: #aaa;
+    font-weight: normal;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.radio-item {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 8px;
+}
+
+.radio-item input[type="radio"] {
+    transform: scale(0.7);
+    margin: 0;
+}
+
+.radio-item input[type="radio"]:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.radio-item input[type="radio"]:disabled+label {
+    cursor: not-allowed;
+}

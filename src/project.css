@@ -1,0 +1,428 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  padding: 40px 0;
+  width: 1200px;
+  max-width: 90vw;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Google Sans', sans-serif;
+}
+
+.title {
+  font-size: 44px;
+}
+
+.author-info {
+  margin: 10px 0;
+}
+
+.authors {
+  display: flex;
+  justify-content: center;
+  max-width: 60vw;
+  flex-wrap: wrap;
+  margin: 20px 0;
+  gap: 10px;
+}
+
+.link-items {
+  display: flex;
+  padding: 10px 0;
+
+}
+
+.link-item {
+  display: flex;
+  align-items: center;
+  background-color: #363636;
+  gap: 5px;
+  color: white;
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link-item:hover {
+  background-color: #505050;
+}
+
+.link-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.author {
+  color: blue;
+}
+
+
+.author-sep {
+  margin-right: 0;
+}
+
+.places {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 60vw;
+  font-size: 20px;
+}
+
+.author,
+.place {
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.section {
+  text-align: center;
+  max-width: 90vw;
+  text-align: justify;
+  margin-top: 20px;
+}
+
+.abstract {
+  width: 800px;
+}
+
+.overview {
+  width: 850px;
+}
+
+.demos {
+  width: 1400px;
+}
+
+.section-title {
+  font-family: 'Google Sans', sans-serif;
+  text-align: center;
+  padding: 10px 0;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.abstract-content {
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+  font-size: 16px;
+  color: #333;
+}
+
+
+
+.playground-iframe {
+  width: 600px;
+  height: 600px;
+  border: none;
+  margin-top: 20px;
+}
+
+.footer {
+  background-color: #fafafa;
+  width: 100%;
+  text-align: center;
+  padding: 50px;
+  margin-top: 30px;
+  color: #333;
+
+}
+
+.footer a {
+  text-decoration: none;
+  color: #3273dc;
+
+}
+
+.viewer-iframe {
+  width: 100%;
+  height: 800px;
+  outline: 1px solid #ccc;
+}
+
+.video-container {
+  width: 1100px;
+  max-width: 100%;
+  overflow: hidden;
+  text-align: center;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+#full-video {
+  width: 100%;
+  border: none;
+  outline: none;
+}
+
+.overview-content img {
+  width: 100%;
+}
+
+.overview-text {
+  font-size: 14px;
+  line-height: 150%;
+  padding: 10px;
+}
+
+
+
+
+.demo-group{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.demo-container {
+  flex: 1;
+  /* border: 1px solid #ddd; */
+  padding: none;
+  margin: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.viewer-container {
+  position: relative;
+}
+
+.demo-controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  gap: 10px;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.control-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.control-group select,
+.control-group input[type="checkbox"] {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+}
+
+.control-group select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.control-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  transform: scale(1.2);
+}
+
+/* iframe样式，防止滚动条导致抖动 */
+.viewer-iframe {
+  width: 100%;
+  height: 600px;
+  border: none;
+  overflow: hidden;
+}
+
+/* 响应式设计：大屏幕时并排显示 */
+@media (min-width: 1400px) {
+  .demo-group {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .demo-container {
+    flex: 1;
+  }
+
+  .viewer-iframe {
+    height: 500px;
+  }
+}
+
+.demo-intro {
+  background: #f9f9f9;
+  padding: 12px 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  border-left: 3px solid #ccc;
+}
+
+.demo-intro h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 18px;
+  font-family: 'Google Sans', sans-serif;
+}
+
+.demo-intro p {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.demo-notes {
+  background: #f9f9f9;
+  padding: 12px 15px;
+  border-radius: 4px;
+  margin-top: 15px;
+  border-left: 3px solid #ccc;
+}
+
+.note-item {
+  padding: 4px 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #666;
+  border-bottom: 1px solid #eee;
+}
+
+.note-item:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.videos-content{
+  max-width: 1000px;
+}
+
+/* Videos section styles */
+.video-group {
+  margin-bottom: 40px;
+}
+
+.video-group-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  font-family: 'Google Sans', sans-serif;
+  text-align: center;
+}
+
+.video-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 0;
+  scroll-behavior: smooth;
+}
+
+.video-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.video-row::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.video-row::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.video-row::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.video-item-row {
+  flex: 0 0 300px;
+  text-align: center;
+}
+
+.video-item-title {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 500;
+}
+
+.video-player {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive design for video groups */
+@media (max-width: 768px) {
+  .video-item-row {
+    flex: 0 0 250px;
+  }
+  
+  .video-group-title {
+    font-size: 18px;
+  }
+  
+  .video-item-title {
+    font-size: 14px;
+  }
+}
+
+/* iframe loading styles */
+.iframe-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 8px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e3e3e3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+.loading-text {
+  color: #666;
+  font-size: 14px;
+  font-family: 'Google Sans', sans-serif;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

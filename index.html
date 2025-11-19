@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Tavatar: Topology-Aware 3D Gaussian Representation for Robust Human Avatar
+      Animation from Monocular Videos
+    </title>
+    <!-- <script src="/sw.js"></script> -->
+    <script
+      src="https://kit.fontawesome.com/47b734e44f.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="src/project.js" type="module"></script>
+
+    <link rel="stylesheet" href="src/project.css" />
+    <link rel="stylesheet" href="src/gui.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Google+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1 class="title">
+        Tavatar: Topology-Aware 3D Gaussian Representation for Robust Human
+        Avatar Animation from Monocular Videos
+      </h1>
+
+      <div class="author-info">
+        <h2>AAAI-2026 Anonymous Submission</h2>
+        <!-- <div class="authors">
+          <span class="author">Author 1</span>
+          <span class="author-sep">,</span>
+          <span class="author">Author 2</span>
+        </div>
+        <div class="places">
+          <span class="place">Place 1</span>
+          <span class="place-sep">,</span>
+          <span class="place">Place 2</span>
+        </div> -->
+      </div>
+
+      <div class="link-items">
+        <a class="link-item" target="_blank">
+          <div class="link-icon">
+            <img src="/svgs/github.svg" />
+          </div>
+
+          <div class="link-text">Code (Coming Soon)</div>
+        </a>
+      </div>
+    </header>
+
+    <div class="video-container">
+      <!-- 视频加载时显示的占位图片 -->
+      <img
+        id="video-placeholder"
+        src="/full.png"
+        alt="Preview image"
+        style="width: 100%; height: auto; display: block"
+      />
+
+      <!-- 实际的视频元素，初始时隐藏 -->
+      <video
+        id="full-video"
+        src="/trim.mp4"
+        autoplay
+        loop
+        muted
+        preload="auto"
+        style="width: 100%; height: auto; display: none"
+      ></video>
+
+      <!-- 添加错误提示容器 -->
+      <div
+        id="video-error-message"
+        style="
+          display: none;
+          text-align: center;
+          padding: 20px;
+          background: #f8f9fa;
+          border: 1px solid #dee2e6;
+          border-radius: 8px;
+          margin-top: 10px;
+        "
+      >
+        <p
+          style="
+            color: #d73527;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            font-size: 16px;
+          "
+        >
+          ⚠️ Rate Limit Exceeded
+        </p>
+        <p style="color: #666; margin: 0; font-size: 14px; line-height: 1.5">
+          Please wait a few minutes and try again. You can also refresh the page
+          to retry.
+        </p>
+      </div>
+
+      <p>
+        Our method constructs a topology-aware 3D Gaussian representation from
+        monocular videos.
+      </p>
+    </div>
+
+    <section class="section demos">
+      <h2 class="section-title">Interactive Demos</h2>
+
+      <div class="demo-intro">
+        <p>
+          Compare methods side-by-side using the dual viewer interface. Select
+          <strong>Method</strong>, <strong>Subject</strong>, and
+          <strong>Pose</strong> from dropdowns. Enable
+          <strong>Random Color</strong> for better 3DGS visualization.
+        </p>
+        <p>
+          <strong>Viewer Interactions:</strong> Use mouse to
+          <strong>drag</strong> for rotation, <strong>scroll</strong> for zoom,
+          and <strong>right-click + drag</strong> for panning.
+        </p>
+      </div>
+      <div class="demo-group">
+        <!-- 第一个demo容器 -->
+        <div class="demo-container">
+          <!-- 参数控制面板 -->
+          <div class="demo-controls">
+            <div class="control-group">
+              <label for="methodSelect1">Method:</label>
+              <select id="methodSelect1" onchange="onMethodChange(1)">
+                <option value="tavatar">Tavatar</option>
+                <option value="ihuman">IHuman</option>
+                <option value="gart">GART</option>
+                <option value="gom">GoM</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="subjectSelect1">Subject:</label>
+              <select id="subjectSelect1" onchange="updateViewer(1)">
+                <option value="people-m3c">m3c</option>
+                <option value="people-m4c">m4c</option>
+                <option value="people-f3c">f3c</option>
+                <option value="people-f4c">f4c</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="poseSelect1">Pose:</label>
+              <select id="poseSelect1" onchange="updateViewer(1)">
+                <option value="aist_demo">aist_demo</option>
+                <option value="eval">eval</option>
+                <option value="t-pose">t-pose</option>
+                <option value="da-pose">da-pose</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="randCheckbox1">Random Color:</label>
+              <input
+                type="checkbox"
+                id="randCheckbox1"
+                onchange="updateViewer(1)"
+              />
+            </div>
+          </div>
+
+          <div class="demo-section">
+            <div class="viewer-container single-viewer">
+              <div class="iframe-loading" id="loading1">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading 3D Viewer...</div>
+              </div>
+              <iframe
+                id="iframe1"
+                class="viewer-iframe"
+                src="/viewer.html"
+                frameborder="0"
+                scrolling="no"
+                sandbox="allow-scripts allow-same-origin"
+                onload="hideLoading(1)"
+              >
+              </iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第二个demo容器 -->
+        <div class="demo-container">
+          <!-- 参数控制面板 -->
+          <div class="demo-controls">
+            <div class="control-group">
+              <label for="methodSelect2">Method:</label>
+              <select id="methodSelect2" onchange="onMethodChange(2)">
+                <option value="tavatar">Tavatar</option>
+                <option value="ihuman">IHuman</option>
+                <option value="gart">GART</option>
+                <option value="gom">GoM</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="subjectSelect2">Subject:</label>
+              <select id="subjectSelect2" onchange="updateViewer(2)">
+                <option value="people-m3c">m3c</option>
+                <option value="people-m4c">m4c</option>
+                <option value="people-f3c">f3c</option>
+                <option value="people-f4c">f4c</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="poseSelect2">Pose:</label>
+              <select id="poseSelect2" onchange="updateViewer(2)">
+                <option value="aist_demo">aist_demo</option>
+                <option value="eval">eval</option>
+                <option value="t-pose">t-pose</option>
+                <option value="da-pose">da-pose</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="randCheckbox2">Random Color:</label>
+              <input
+                type="checkbox"
+                id="randCheckbox2"
+                onchange="updateViewer(2)"
+              />
+            </div>
+          </div>
+
+          <div class="demo-section">
+            <div class="viewer-container single-viewer">
+              <div class="iframe-loading" id="loading2">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Loading 3D Viewer...</div>
+              </div>
+              <iframe
+                id="iframe2"
+                class="viewer-iframe"
+                src="/viewer.html"
+                frameborder="0"
+                scrolling="no"
+                sandbox="allow-scripts allow-same-origin"
+                onload="hideLoading(2)"
+              >
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-notes">
+        <div class="note-item">
+          <strong>🎮 In-Viewer Controls:</strong> Switch between <em>3DGS</em>,
+          <em>Mesh</em>, <em>Mesh-Frame</em>, and <em>Combo</em> display modes.
+          Enable <em>Auto Rotate</em> for automatic camera rotation.
+        </div>
+        <div class="note-item">
+          <strong>⏳ Resource Loading:</strong> Initial loading may take 30-60
+          seconds. A dedicated GPU is recommended for optimal performance.
+        </div>
+        <div class="note-item">
+          <strong>🎨 GoM Limitation:</strong> GoM method uses an additional
+          shading module that affects 3DGS color rendering, causing different
+          visual appearance compared to other methods.
+        </div>
+
+        <div class="note-item">
+          <strong>💻 Browser Recommendation:</strong> For best performance and
+          compatibility, use Chrome browser on PC. Mobile devices may experience
+          slower loading and reduced functionality.
+        </div>
+      </div>
+    </section>
+
+    <section class="section abstract">
+      <h1 class="section-title abstract-title">Abstract</h1>
+      <div class="abstract-content">
+        Reconstructing high-fidelity and animatable human avatars from monocular
+        videos remains a key challenge for immersive virtual applications.
+        Although 3D Gaussian Splatting (3DGS) enables efficient human modeling,
+        existing methods often optimize Gaussians with unconstrained geometric
+        attributes (rotation or scale). As these Gaussians typically float
+        freely in space and lack a coherent topology, they easily overfit to
+        training poses under the monocular video setting. This makes it
+        difficult to accurately model surface stretching and compression during
+        novel pose animation. To overcome this, we propose <b>Tavatar</b>, a
+        topology-aware Gaussian binding framework that establishes explicit
+        geometry constraints between 3DGS and parametric human mesh. To ensure
+        robustness under deformation, we align Gaussians with a coarse clothed
+        mesh that can be animated. Specifically, Gaussians are bound to both
+        mesh faces and vertices, oriented along mesh normals. Face Gaussians use
+        analytically derived scales from triangle geometry, while Vertex
+        Gaussians have learnable scales constrained by local edge lengths,
+        ensuring full surface coverage with topology-aware constraints. To
+        further preserve mesh quality, we introduce an equilateral
+        regularization term that minimizes triangle aspect ratio distortion
+        during optimization.
+      </div>
+    </section>
+
+    <section class="section overview">
+      <h1 class="section-title overview-title">Overview</h1>
+      <div class="overview-content">
+        <img src="/overview.png" alt="" />
+        <p class="overview-text">
+          Overview of the <strong>Tavatar</strong> framework. We begin with a
+          canonical SMPL mesh and use a shape encoder to predict a coarse
+          deformable mesh. This mesh guides our dual Gaussian binding strategy:
+          Face Gaussians provide structured surface coverage, while Vertex
+          Gaussians enhance local detail. All Gaussians inherit topology-aware
+          scale and rotation attributes from the mesh to maintain consistency
+          during animation. The overall optimization combines photometric and
+          geometric losses, including a novel equilateral constraint that
+          promotes stable scaling and complete surface coverage.
+        </p>
+      </div>
+    </section>
+
+    <section class="section videos">
+      <h1 class="section-title videos-title">Results Videos</h1>
+      <div class="videos-content">
+        <!-- People Snapshot Eval -->
+        <div class="video-group">
+          <h3 class="video-group-title">People Snapshot - Eval</h3>
+          <div class="video-row" id="people-eval-row">
+            <!-- Videos will be dynamically generated -->
+          </div>
+        </div>
+
+        <!-- People Snapshot AIST Demo -->
+        <div class="video-group">
+          <h3 class="video-group-title">People Snapshot - AIST Demo</h3>
+          <div class="video-row" id="people-aist-row">
+            <!-- Videos will be dynamically generated -->
+          </div>
+        </div>
+
+        <!-- X-Avatar Eval -->
+        <div class="video-group">
+          <h3 class="video-group-title">X-Avatar - Eval</h3>
+          <div class="video-row" id="xavatar-eval-row">
+            <!-- Videos will be dynamically generated -->
+          </div>
+        </div>
+
+        <!-- X-Avatar AIST Demo -->
+        <div class="video-group">
+          <h3 class="video-group-title">X-Avatar - AIST Demo</h3>
+          <div class="video-row" id="xavatar-aist-row">
+            <!-- Videos will be dynamically generated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer">
+      <p>
+        The style of this website is borrowed from
+        <a href="https://nerfies.github.io/">Nerfies</a>.
+      </p>
+
+      <p>
+        The interactive demos are modified from
+        <a href="https://github.com/mkkellogg/GaussianSplats3D"
+          >GaussianSplats3D</a
+        >.
+      </p>
+    </section>
+
+    <script>
+      // 隐藏loading提示
+      function hideLoading(demoIndex) {
+        const loading = document.getElementById(`loading${demoIndex}`);
+        if (loading) {
+          loading.style.display = "none";
+        }
+      }
+
+      // 显示loading提示
+      function showLoading(demoIndex) {
+        const loading = document.getElementById(`loading${demoIndex}`);
+        if (loading) {
+          loading.style.display = "flex";
+        }
+      }
+
+      // 更新特定viewer的URL参数
+      function updateViewer(demoIndex) {
+        // 显示loading
+        showLoading(demoIndex);
+
+        const method = document.getElementById(
+          `methodSelect${demoIndex}`
+        ).value;
+        const subject = document.getElementById(
+          `subjectSelect${demoIndex}`
+        ).value;
+        const pose = document.getElementById(`poseSelect${demoIndex}`).value;
+        const rand = document.getElementById(
+          `randCheckbox${demoIndex}`
+        ).checked;
+
+        const params = new URLSearchParams({
+          method: method,
+          subject: subject,
+          pose: pose,
+          rand: rand.toString(),
+        });
+
+        const iframe = document.getElementById(`iframe${demoIndex}`);
+        iframe.src = `/viewer.html?${params.toString()}`;
+      }
+
+      // 更新pose选项的可用性
+      function updatePoseOptions(demoIndex) {
+        const method = document.getElementById(
+          `methodSelect${demoIndex}`
+        ).value;
+        const poseSelect = document.getElementById(`poseSelect${demoIndex}`);
+        const tposeOption = poseSelect.querySelector('option[value="t-pose"]');
+        const daposeOption = poseSelect.querySelector(
+          'option[value="da-pose"]'
+        );
+
+        if (method === "gom") {
+          // GoM方法不支持t-pose和da-pose
+          tposeOption.disabled = true;
+          tposeOption.style.color = "#999";
+          daposeOption.disabled = true;
+          daposeOption.style.color = "#999";
+
+          // 如果当前选中的是不支持的pose，切换到aist_demo
+          if (poseSelect.value === "t-pose" || poseSelect.value === "da-pose") {
+            poseSelect.value = "aist_demo";
+          }
+        } else if (method === "gart") {
+          // GART方法支持所有pose包括da-pose
+          tposeOption.disabled = false;
+          tposeOption.style.color = "";
+          daposeOption.disabled = false;
+          daposeOption.style.color = "";
+        } else {
+          // Tavatar和IHuman方法支持t-pose但不支持da-pose
+          tposeOption.disabled = false;
+          tposeOption.style.color = "";
+          daposeOption.disabled = true;
+          daposeOption.style.color = "#999";
+
+          // 如果当前选中的是da-pose，切换到aist_demo
+          if (poseSelect.value === "da-pose") {
+            poseSelect.value = "aist_demo";
+          }
+        }
+      }
+
+      // 当方法改变时，更新pose选项并刷新viewer
+      function onMethodChange(demoIndex) {
+        updatePoseOptions(demoIndex);
+        updateViewer(demoIndex);
+      }
+
+      // 设置demo容器的默认值
+      function setDemoDefaults(demoIndex, method, subject, pose, rand = false) {
+        document.getElementById(`methodSelect${demoIndex}`).value = method;
+        document.getElementById(`subjectSelect${demoIndex}`).value = subject;
+        document.getElementById(`poseSelect${demoIndex}`).value = pose;
+        document.getElementById(`randCheckbox${demoIndex}`).checked = rand;
+
+        // 更新pose选项的可用性
+        updatePoseOptions(demoIndex);
+
+        updateViewer(demoIndex);
+      }
+
+      // 页面加载时设置默认值
+      document.addEventListener("DOMContentLoaded", function () {
+        // Demo 1: Tavatar方法，m3c人物，aist_demo动作
+        setDemoDefaults(1, "ihuman", "people-m3c", "aist_demo", false);
+
+        // Demo 2: GART方法，m3c人物，aist_demo动作
+        setDemoDefaults(2, "tavatar", "people-m3c", "aist_demo", false);
+
+        // 动态生成视频内容
+        generateVideos();
+
+        // 处理视频加载
+        const video = document.getElementById("full-video");
+        const placeholder = document.getElementById("video-placeholder");
+        const errorMessage = document.getElementById("video-error-message");
+
+        // 处理占位图片加载错误
+        placeholder.addEventListener("error", function () {
+          console.warn("Placeholder image failed to load");
+          placeholder.style.display = "none";
+          errorMessage.style.display = "block";
+        });
+
+        // 当视频可以播放时（缓冲足够），隐藏占位图片并显示视频
+        video.addEventListener("canplay", function () {
+          placeholder.style.display = "none";
+          video.style.display = "block";
+          errorMessage.style.display = "none";
+        });
+
+        // 如果视频加载出错，保持显示占位图片并更新提示文本
+        video.addEventListener("error", function () {
+          console.warn("Video failed to load, keeping placeholder image");
+          video.style.display = "none";
+
+          // 检查占位图片是否也加载失败
+          if (placeholder.complete && placeholder.naturalHeight === 0) {
+            placeholder.style.display = "none";
+            errorMessage.style.display = "block";
+          } else {
+            placeholder.style.display = "block";
+            placeholder.alt = "Video unavailable - showing preview image";
+          }
+        });
+
+        // 监听视频加载开始，更新占位图片提示
+        video.addEventListener("loadstart", function () {
+          placeholder.alt = "Loading video...";
+          errorMessage.style.display = "none";
+        });
+      });
+
+      // 动态生成视频内容的函数
+      function generateVideos() {
+        // 定义subject组
+        const peopleSubjects = [
+          { id: "m3c", name: "people-m3c" },
+          { id: "m4c", name: "people-m4c" },
+          { id: "f3c", name: "people-f3c" },
+          { id: "f4c", name: "people-f4c" },
+        ];
+
+        const xavatarSubjects = [
+          { id: "00016", name: "xavatar-00016" },
+          { id: "00017", name: "xavatar-00017" },
+          { id: "00018", name: "xavatar-00018" },
+          { id: "00019", name: "xavatar-00019" },
+        ];
+
+        // 生成4组视频
+        generateVideoGroup(
+          "people-eval-row",
+          peopleSubjects,
+          "eval_bottom.mp4",
+          "Eval"
+        );
+        generateVideoGroup(
+          "people-aist-row",
+          peopleSubjects,
+          "novel_pose_aist_demo.mp4",
+          "AIST Demo"
+        );
+        generateVideoGroup(
+          "xavatar-eval-row",
+          xavatarSubjects,
+          "eval_bottom.mp4",
+          "Eval"
+        );
+        generateVideoGroup(
+          "xavatar-aist-row",
+          xavatarSubjects,
+          "novel_pose_aist_demo.mp4",
+          "AIST Demo"
+        );
+      }
+
+      // 生成单个视频组的函数
+      function generateVideoGroup(containerId, subjects, videoFile, videoType) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = ""; // 清空现有内容
+
+        subjects.forEach((subject, index) => {
+          const videoItem = document.createElement("div");
+          videoItem.className = "video-item-row";
+          videoItem.style.position = "relative";
+
+          const title = document.createElement("h4");
+          title.textContent = `${subject.name}`;
+          title.className = "video-item-title";
+
+          const video = document.createElement("video");
+          video.controls = true;
+          video.className = "video-player";
+
+          // 只对第一个视频设置preload，其他使用none减少同时请求
+          video.preload = index === 0 ? "metadata" : "none";
+
+          // 创建错误提示容器
+          const errorContainer = document.createElement("div");
+          errorContainer.style.cssText = `
+            display: none; 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            border-radius: 6px; 
+            padding: 15px; 
+            text-align: center; 
+            margin: 10px 0;
+            min-height: 120px;
+            flex-direction: column;
+            justify-content: center;
+          `;
+
+          const errorIcon = document.createElement("div");
+          errorIcon.style.cssText = "font-size: 24px; margin-bottom: 8px;";
+          errorIcon.textContent = "⚠️";
+
+          const errorTitle = document.createElement("div");
+          errorTitle.style.cssText =
+            "color: #d73527; font-weight: bold; margin-bottom: 8px; font-size: 14px;";
+          errorTitle.textContent = "Too Many Requests";
+
+          const errorDesc = document.createElement("div");
+          errorDesc.style.cssText =
+            "color: #666; font-size: 12px; line-height: 1.4; margin-bottom: 10px;";
+          errorDesc.textContent =
+            "Rate limit exceeded. Please wait a few minutes and refresh the page to try again.";
+
+          errorContainer.appendChild(errorIcon);
+          errorContainer.appendChild(errorTitle);
+          errorContainer.appendChild(errorDesc);
+
+          // 添加错误处理
+          video.addEventListener("error", (e) => {
+            console.error(`Failed to load video: ${subject.name}`, e);
+            video.style.display = "none";
+            errorContainer.style.display = "flex";
+          });
+
+          const source = document.createElement("source");
+          source.src = `/results/${subject.id}/${videoFile}`;
+          source.type = "video/mp4";
+
+          const fallbackText = document.createTextNode(
+            "Your browser does not support the video tag."
+          );
+
+          video.appendChild(source);
+          video.appendChild(fallbackText);
+
+          videoItem.appendChild(video);
+          videoItem.appendChild(errorContainer);
+          videoItem.appendChild(title);
+
+          container.appendChild(videoItem);
+        });
+
+        // 实现渐进式加载
+        implementProgressiveLoading(container);
+      }
+
+      // 实现渐进式加载以减少同时请求
+      function implementProgressiveLoading(container) {
+        const videos = container.querySelectorAll('video[preload="none"]');
+        let loadIndex = 0;
+
+        function loadNext() {
+          if (loadIndex < videos.length) {
+            const video = videos[loadIndex];
+            video.preload = "metadata";
+            loadIndex++;
+
+            // 延迟加载下一个视频，避免同时请求过多
+            setTimeout(loadNext, 1500);
+          }
+        }
+
+        // 延迟开始渐进式加载
+        if (videos.length > 0) {
+          setTimeout(loadNext, 2000);
+        }
+      }
+    </script>
+  </body>
+</html>
