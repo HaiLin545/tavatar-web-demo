@@ -25,12 +25,11 @@
   <body>
     <header>
       <h1 class="title">
-        Tavatar: Topology-Aware 3D Gaussian Representation for Robust Human
-        Avatar Animation from Monocular Videos
+        Tavatar: Topology-Aware Gaussian Attribute Derivation for Animatable Human Avatars
       </h1>
 
       <div class="author-info">
-        <h2>AAAI-2026 Anonymous Submission</h2>
+        <h2>CVPR-2026 Anonymous Submission</h2>
         <!-- <div class="authors">
           <span class="author">Author 1</span>
           <span class="author-sep">,</span>
@@ -282,43 +281,16 @@
     <section class="section abstract">
       <h1 class="section-title abstract-title">Abstract</h1>
       <div class="abstract-content">
-        Reconstructing high-fidelity and animatable human avatars from monocular
-        videos remains a key challenge for immersive virtual applications.
-        Although 3D Gaussian Splatting (3DGS) enables efficient human modeling,
-        existing methods often optimize Gaussians with unconstrained geometric
-        attributes (rotation or scale). As these Gaussians typically float
-        freely in space and lack a coherent topology, they easily overfit to
-        training poses under the monocular video setting. This makes it
-        difficult to accurately model surface stretching and compression during
-        novel pose animation. To overcome this, we propose <b>Tavatar</b>, a
-        topology-aware Gaussian binding framework that establishes explicit
-        geometry constraints between 3DGS and parametric human mesh. To ensure
-        robustness under deformation, we align Gaussians with a coarse clothed
-        mesh that can be animated. Specifically, Gaussians are bound to both
-        mesh faces and vertices, oriented along mesh normals. Face Gaussians use
-        analytically derived scales from triangle geometry, while Vertex
-        Gaussians have learnable scales constrained by local edge lengths,
-        ensuring full surface coverage with topology-aware constraints. To
-        further preserve mesh quality, we introduce an equilateral
-        regularization term that minimizes triangle aspect ratio distortion
-        during optimization.
+Reconstructing high-fidelity, animatable human avatars from monocular videos remains a critical challenge. Existing 3DGS-based human animation methods constrain Gaussian parameters but exclude scale, which we argue is crucial for adapting human poses to challenging out-of-distribution poses. To achieve robust animation under unseen poses, we propose <strong>Tavatar</strong>, which derives key parameters such as scale, rotation, and other geometric attributes directly from the local mesh geometry, instead of learning them through unconstrained optimization. This paradigm shift enforces topological consistency by design, as each Gaussian is analytically anchored to the local mesh geometry, inheriting its spatial structure and deformation behavior. Specifically, we bind Gaussians to mesh faces and vertices, deriving their scales and orientations from triangle properties and local edge lengths to ensure coherent surface coverage. To ensure the stability of this analytical mapping, we introduce a crucial equilateral regularization term that preserves mesh integrity. Extensive experiments demonstrate that Tavatar achieves superior animation robustness on challenging out-of-distribution poses, reducing normal error by 13.8\% on X-Avatar and 17.9\% on PeopleSnapshot against the best baseline, while maintaining competitive rendering quality.
       </div>
     </section>
 
     <section class="section overview">
       <h1 class="section-title overview-title">Overview</h1>
       <div class="overview-content">
-        <img src="/overview.png" alt="" />
+        <img src="/overview2.png" alt="" />
         <p class="overview-text">
-          Overview of the <strong>Tavatar</strong> framework. We begin with a
-          canonical SMPL mesh and use a shape encoder to predict a coarse
-          deformable mesh. This mesh guides our dual Gaussian binding strategy:
-          Face Gaussians provide structured surface coverage, while Vertex
-          Gaussians enhance local detail. All Gaussians inherit topology-aware
-          scale and rotation attributes from the mesh to maintain consistency
-          during animation. The overall optimization combines photometric and
-          geometric losses, including a novel equilateral constraint that
-          promotes stable scaling and complete surface coverage.
+         <b>Method overview.</b> We propose Tavatar, a geometry-driven paradigm that reconstructs high-quality animatable human avatars by analytically deriving Gaussian attributes from a deformable mesh. Our approach includes: Analytical Gaussian Attribute Derivation: All Gaussian positions, scales, and orientations are computed directly from mesh topology—rather than optimized—yielding structurally correct Gaussian placement, improved surface coverage, and pose-consistent animation across challenging motions. Equilateral Geometry Regularization: An equilateral constraint enforces stable Gaussian binding on the mesh, preventing degeneration and ensuring robust reconstruction quality, especially under large deformations and in fine-detail regions such as hands and clothing folds.
         </p>
       </div>
     </section>
