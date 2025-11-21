@@ -4,8 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <!-- <script src="/sw.js"></script> -->
+    <!-- <script src="/sw2.js"></script> -->
     <title>3D Gaussian Splat Demo - Human</title>
+    <script src="/getbase.js"></script>
     <link rel="stylesheet" href="src/viewer-gui.css" />
   </head>
 
@@ -21,6 +22,77 @@
       </div>
 
       <div class="gui-content" id="guiContent">
+        <div class="control-section">
+          <h5>Method:</h5>
+
+          <div class="gui-row">
+            <label for="methodSelect" style="min-width: auto; font-size: 8px"
+              >Method:</label
+            >
+            <select
+              id="methodSelect"
+              class="gui-select"
+              onchange="changeMethod()"
+              style="width: 65px; font-size: 8px; padding: 1px 2px"
+            >
+              <option value="tavatar">Tavatar</option>
+              <option value="ihuman">IHuman</option>
+              <option value="gart">GART</option>
+              <option value="gom">GoM</option>
+            </select>
+          </div>
+        </div>
+
+
+
+        <div class="control-section" id="subjectPoseSection">
+          <h5>Subject & Pose:</h5>
+
+          <div class="gui-row">
+            <label for="subjectSelect" style="min-width: auto; font-size: 8px"
+              >Subject:</label
+            >
+            <select
+              id="subjectSelect"
+              class="gui-select"
+              onchange="changeSubject()"
+              style="width: 80px; font-size: 8px; padding: 1px 2px"
+            >
+              <option value="people-m3c">m3c</option>
+              <option value="people-m4c">m4c</option>
+              <option value="people-f3c">f3c</option>
+              <option value="people-f4c">f4c</option>
+              <option value="xavatar-16">xav-16</option>
+              <option value="xavatar-17">xav-17</option>
+              <option value="xavatar-18">xav-18</option>
+              <option value="xavatar-19">xav-19</option>
+            </select>
+          </div>
+
+          <div class="gui-row">
+            <label for="poseSelect" style="min-width: auto; font-size: 8px"
+              >Pose:</label
+            >
+            <select
+              id="poseSelect"
+              class="gui-select"
+              onchange="changePose()"
+              style="width: 70px; font-size: 8px; padding: 1px 2px"
+            >
+              <option value="aist_demo">aist_demo</option>
+              <option value="balei1">balei1</option>
+              <option value="balei2">balei2</option>
+              <option value="dance1">dance1</option>
+              <option value="dance2">dance2</option>
+              <option value="da_pose_smpl">da_pose_smpl</option>
+              <option value="t_pose_smpl">t_pose_smpl</option>
+              <option value="eval">eval</option>
+              <option value="t-pose">t-pose</option>
+              <option value="da-pose">da-pose</option>
+            </select>
+          </div>
+        </div>
+
         <div class="control-section">
           <h5>Display Mode:</h5>
 
@@ -107,6 +179,18 @@
               padding-top: 6px;
             "
           >
+            <input
+              type="checkbox"
+              id="randCheckbox"
+              class="gui-checkbox"
+              onchange="toggleRand()"
+            />
+            <label for="randCheckbox" style="min-width: auto; font-size: 8px"
+              >Randomize Colors</label
+            >
+          </div>
+
+          <div class="gui-row">
             <input
               type="checkbox"
               id="autoRotate"

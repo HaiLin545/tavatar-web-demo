@@ -7,11 +7,12 @@
       Tavatar: Topology-Aware 3D Gaussian Representation for Robust Human Avatar
       Animation from Monocular Videos
     </title>
-    <!-- <script src="/sw.js"></script> -->
+    <script src="/sw2.js"></script>
     <script
       src="https://kit.fontawesome.com/47b734e44f.js"
       crossorigin="anonymous"
     ></script>
+    <script src="/getbase.js"></script>
     <script src="src/project.js" type="module"></script>
 
     <link rel="stylesheet" href="src/project.css" />
@@ -25,7 +26,8 @@
   <body>
     <header>
       <h1 class="title">
-        Tavatar: Topology-Aware Gaussian Attribute Derivation for Animatable Human Avatars
+        Tavatar: Topology-Aware Gaussian Attribute Derivation for Animatable
+        Human Avatars
       </h1>
 
       <div class="author-info">
@@ -127,48 +129,6 @@
       <div class="demo-group">
         <!-- 第一个demo容器 -->
         <div class="demo-container">
-          <!-- 参数控制面板 -->
-          <div class="demo-controls">
-            <div class="control-group">
-              <label for="methodSelect1">Method:</label>
-              <select id="methodSelect1" onchange="onMethodChange(1)">
-                <option value="tavatar">Tavatar</option>
-                <option value="ihuman">IHuman</option>
-                <option value="gart">GART</option>
-                <option value="gom">GoM</option>
-              </select>
-            </div>
-
-            <div class="control-group">
-              <label for="subjectSelect1">Subject:</label>
-              <select id="subjectSelect1" onchange="updateViewer(1)">
-                <option value="people-m3c">m3c</option>
-                <option value="people-m4c">m4c</option>
-                <option value="people-f3c">f3c</option>
-                <option value="people-f4c">f4c</option>
-              </select>
-            </div>
-
-            <div class="control-group">
-              <label for="poseSelect1">Pose:</label>
-              <select id="poseSelect1" onchange="updateViewer(1)">
-                <option value="aist_demo">aist_demo</option>
-                <option value="eval">eval</option>
-                <option value="t-pose">t-pose</option>
-                <option value="da-pose">da-pose</option>
-              </select>
-            </div>
-
-            <div class="control-group">
-              <label for="randCheckbox1">Random Color:</label>
-              <input
-                type="checkbox"
-                id="randCheckbox1"
-                onchange="updateViewer(1)"
-              />
-            </div>
-          </div>
-
           <div class="demo-section">
             <div class="viewer-container single-viewer">
               <div class="iframe-loading" id="loading1">
@@ -178,61 +138,26 @@
               <iframe
                 id="iframe1"
                 class="viewer-iframe"
-                src="/viewer.html"
+                src="/w/tavatar/viewer.html?method=ihuman&subject=people-m3c&pose=da_pose_smpl&rand=false"
                 frameborder="0"
                 scrolling="no"
                 sandbox="allow-scripts allow-same-origin"
                 onload="hideLoading(1)"
               >
               </iframe>
+              <button class="open-new-window-btn" onclick="openInNewWindow(1)" title="Open in New Window">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </button>
             </div>
           </div>
         </div>
 
         <!-- 第二个demo容器 -->
         <div class="demo-container">
-          <!-- 参数控制面板 -->
-          <div class="demo-controls">
-            <div class="control-group">
-              <label for="methodSelect2">Method:</label>
-              <select id="methodSelect2" onchange="onMethodChange(2)">
-                <option value="tavatar">Tavatar</option>
-                <option value="ihuman">IHuman</option>
-                <option value="gart">GART</option>
-                <option value="gom">GoM</option>
-              </select>
-            </div>
-
-            <div class="control-group">
-              <label for="subjectSelect2">Subject:</label>
-              <select id="subjectSelect2" onchange="updateViewer(2)">
-                <option value="people-m3c">m3c</option>
-                <option value="people-m4c">m4c</option>
-                <option value="people-f3c">f3c</option>
-                <option value="people-f4c">f4c</option>
-              </select>
-            </div>
-
-            <div class="control-group">
-              <label for="poseSelect2">Pose:</label>
-              <select id="poseSelect2" onchange="updateViewer(2)">
-                <option value="aist_demo">aist_demo</option>
-                <option value="eval">eval</option>
-                <option value="t-pose">t-pose</option>
-                <option value="da-pose">da-pose</option>
-              </select>
-            </div>
-
-            <div class="control-group">
-              <label for="randCheckbox2">Random Color:</label>
-              <input
-                type="checkbox"
-                id="randCheckbox2"
-                onchange="updateViewer(2)"
-              />
-            </div>
-          </div>
-
           <div class="demo-section">
             <div class="viewer-container single-viewer">
               <div class="iframe-loading" id="loading2">
@@ -242,13 +167,20 @@
               <iframe
                 id="iframe2"
                 class="viewer-iframe"
-                src="/viewer.html"
+                src="/w/tavatar/viewer.html?method=tavatar&subject=people-m3c&pose=da_pose_smpl&rand=false"
                 frameborder="0"
                 scrolling="no"
                 sandbox="allow-scripts allow-same-origin"
                 onload="hideLoading(2)"
               >
               </iframe>
+              <button class="open-new-window-btn" onclick="openInNewWindow(2)" title="Open in New Window">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </button>
             </div>
           </div>
         </div>
@@ -281,7 +213,26 @@
     <section class="section abstract">
       <h1 class="section-title abstract-title">Abstract</h1>
       <div class="abstract-content">
-Reconstructing high-fidelity, animatable human avatars from monocular videos remains a critical challenge. Existing 3DGS-based human animation methods constrain Gaussian parameters but exclude scale, which we argue is crucial for adapting human poses to challenging out-of-distribution poses. To achieve robust animation under unseen poses, we propose <strong>Tavatar</strong>, which derives key parameters such as scale, rotation, and other geometric attributes directly from the local mesh geometry, instead of learning them through unconstrained optimization. This paradigm shift enforces topological consistency by design, as each Gaussian is analytically anchored to the local mesh geometry, inheriting its spatial structure and deformation behavior. Specifically, we bind Gaussians to mesh faces and vertices, deriving their scales and orientations from triangle properties and local edge lengths to ensure coherent surface coverage. To ensure the stability of this analytical mapping, we introduce a crucial equilateral regularization term that preserves mesh integrity. Extensive experiments demonstrate that Tavatar achieves superior animation robustness on challenging out-of-distribution poses, reducing normal error by 13.8\% on X-Avatar and 17.9\% on PeopleSnapshot against the best baseline, while maintaining competitive rendering quality.
+        Reconstructing high-fidelity, animatable human avatars from monocular
+        videos remains a critical challenge. Existing 3DGS-based human animation
+        methods constrain Gaussian parameters but exclude scale, which we argue
+        is crucial for adapting human poses to challenging out-of-distribution
+        poses. To achieve robust animation under unseen poses, we propose
+        <strong>Tavatar</strong>, which derives key parameters such as scale,
+        rotation, and other geometric attributes directly from the local mesh
+        geometry, instead of learning them through unconstrained optimization.
+        This paradigm shift enforces topological consistency by design, as each
+        Gaussian is analytically anchored to the local mesh geometry, inheriting
+        its spatial structure and deformation behavior. Specifically, we bind
+        Gaussians to mesh faces and vertices, deriving their scales and
+        orientations from triangle properties and local edge lengths to ensure
+        coherent surface coverage. To ensure the stability of this analytical
+        mapping, we introduce a crucial equilateral regularization term that
+        preserves mesh integrity. Extensive experiments demonstrate that Tavatar
+        achieves superior animation robustness on challenging
+        out-of-distribution poses, reducing normal error by 13.8% on X-Avatar
+        and 17.9% on PeopleSnapshot against the best baseline, while maintaining
+        competitive rendering quality.
       </div>
     </section>
 
@@ -290,13 +241,24 @@ Reconstructing high-fidelity, animatable human avatars from monocular videos rem
       <div class="overview-content">
         <img src="/overview2.png" alt="" />
         <p class="overview-text">
-         <b>Method overview.</b> We propose Tavatar, a geometry-driven paradigm that reconstructs high-quality animatable human avatars by analytically deriving Gaussian attributes from a deformable mesh. Our approach includes: Analytical Gaussian Attribute Derivation: All Gaussian positions, scales, and orientations are computed directly from mesh topology—rather than optimized—yielding structurally correct Gaussian placement, improved surface coverage, and pose-consistent animation across challenging motions. Equilateral Geometry Regularization: An equilateral constraint enforces stable Gaussian binding on the mesh, preventing degeneration and ensuring robust reconstruction quality, especially under large deformations and in fine-detail regions such as hands and clothing folds.
+          <b>Method overview.</b> We propose Tavatar, a geometry-driven paradigm
+          that reconstructs high-quality animatable human avatars by
+          analytically deriving Gaussian attributes from a deformable mesh. Our
+          approach includes: Analytical Gaussian Attribute Derivation: All
+          Gaussian positions, scales, and orientations are computed directly
+          from mesh topology—rather than optimized—yielding structurally correct
+          Gaussian placement, improved surface coverage, and pose-consistent
+          animation across challenging motions. Equilateral Geometry
+          Regularization: An equilateral constraint enforces stable Gaussian
+          binding on the mesh, preventing degeneration and ensuring robust
+          reconstruction quality, especially under large deformations and in
+          fine-detail regions such as hands and clothing folds.
         </p>
       </div>
     </section>
 
     <section class="section videos">
-      <h1 class="section-title videos-title">Results Videos</h1>
+      <h1 class="section-title videos-title">Reconstruction Results</h1>
       <div class="videos-content">
         <!-- People Snapshot Eval -->
         <div class="video-group">
@@ -355,110 +317,34 @@ Reconstructing high-fidelity, animatable human avatars from monocular videos rem
         }
       }
 
-      // 显示loading提示
-      function showLoading(demoIndex) {
-        const loading = document.getElementById(`loading${demoIndex}`);
-        if (loading) {
-          loading.style.display = "flex";
-        }
-      }
-
-      // 更新特定viewer的URL参数
-      function updateViewer(demoIndex) {
-        // 显示loading
-        showLoading(demoIndex);
-
-        const method = document.getElementById(
-          `methodSelect${demoIndex}`
-        ).value;
-        const subject = document.getElementById(
-          `subjectSelect${demoIndex}`
-        ).value;
-        const pose = document.getElementById(`poseSelect${demoIndex}`).value;
-        const rand = document.getElementById(
-          `randCheckbox${demoIndex}`
-        ).checked;
-
-        const params = new URLSearchParams({
-          method: method,
-          subject: subject,
-          pose: pose,
-          rand: rand.toString(),
-        });
-
+      // 在新窗口打开iframe内容
+      function openInNewWindow(demoIndex) {
         const iframe = document.getElementById(`iframe${demoIndex}`);
-        iframe.src = `/viewer.html?${params.toString()}`;
-      }
-
-      // 更新pose选项的可用性
-      function updatePoseOptions(demoIndex) {
-        const method = document.getElementById(
-          `methodSelect${demoIndex}`
-        ).value;
-        const poseSelect = document.getElementById(`poseSelect${demoIndex}`);
-        const tposeOption = poseSelect.querySelector('option[value="t-pose"]');
-        const daposeOption = poseSelect.querySelector(
-          'option[value="da-pose"]'
-        );
-
-        if (method === "gom") {
-          // GoM方法不支持t-pose和da-pose
-          tposeOption.disabled = true;
-          tposeOption.style.color = "#999";
-          daposeOption.disabled = true;
-          daposeOption.style.color = "#999";
-
-          // 如果当前选中的是不支持的pose，切换到aist_demo
-          if (poseSelect.value === "t-pose" || poseSelect.value === "da-pose") {
-            poseSelect.value = "aist_demo";
+        if (!iframe) return;
+        
+        let url = iframe.src;
+        
+        // 尝试获取iframe内部的当前URL（如果同源）
+        try {
+          if (iframe.contentWindow && iframe.contentWindow.location.href) {
+            const iframeUrl = iframe.contentWindow.location.href;
+            // 确保不是 about:blank
+            if (iframeUrl !== 'about:blank' && iframeUrl.startsWith('http')) {
+              url = iframeUrl;
+            }
           }
-        } else if (method === "gart") {
-          // GART方法支持所有pose包括da-pose
-          tposeOption.disabled = false;
-          tposeOption.style.color = "";
-          daposeOption.disabled = false;
-          daposeOption.style.color = "";
-        } else {
-          // Tavatar和IHuman方法支持t-pose但不支持da-pose
-          tposeOption.disabled = false;
-          tposeOption.style.color = "";
-          daposeOption.disabled = true;
-          daposeOption.style.color = "#999";
-
-          // 如果当前选中的是da-pose，切换到aist_demo
-          if (poseSelect.value === "da-pose") {
-            poseSelect.value = "aist_demo";
-          }
+        } catch (e) {
+          // 跨域访问限制，使用原始 src
+          console.log('Cannot access iframe URL due to same-origin policy, using src instead');
         }
-      }
-
-      // 当方法改变时，更新pose选项并刷新viewer
-      function onMethodChange(demoIndex) {
-        updatePoseOptions(demoIndex);
-        updateViewer(demoIndex);
-      }
-
-      // 设置demo容器的默认值
-      function setDemoDefaults(demoIndex, method, subject, pose, rand = false) {
-        document.getElementById(`methodSelect${demoIndex}`).value = method;
-        document.getElementById(`subjectSelect${demoIndex}`).value = subject;
-        document.getElementById(`poseSelect${demoIndex}`).value = pose;
-        document.getElementById(`randCheckbox${demoIndex}`).checked = rand;
-
-        // 更新pose选项的可用性
-        updatePoseOptions(demoIndex);
-
-        updateViewer(demoIndex);
+        
+        if (url) {
+          window.open(url, '_blank');
+        }
       }
 
       // 页面加载时设置默认值
       document.addEventListener("DOMContentLoaded", function () {
-        // Demo 1: Tavatar方法，m3c人物，aist_demo动作
-        setDemoDefaults(1, "ihuman", "people-m3c", "aist_demo", false);
-
-        // Demo 2: GART方法，m3c人物，aist_demo动作
-        setDemoDefaults(2, "tavatar", "people-m3c", "aist_demo", false);
-
         // 动态生成视频内容
         generateVideos();
 
@@ -610,7 +496,7 @@ Reconstructing high-fidelity, animatable human avatars from monocular videos rem
           });
 
           const source = document.createElement("source");
-          source.src = `/results/${subject.id}/${videoFile}`;
+          source.src = `${getBaseName()}/results/${subject.id}/${videoFile}`;
           source.type = "video/mp4";
 
           const fallbackText = document.createTextNode(

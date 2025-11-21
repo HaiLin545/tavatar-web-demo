@@ -9,7 +9,7 @@ export default defineConfig({
       "Cross-Origin-Embedder-Policy": "require-corp",
     },     
   },
-  base: "/",
+  base: "/w/tavatar",
   build: {
     // 启用压缩
     minify: "terser",

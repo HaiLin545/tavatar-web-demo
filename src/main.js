@@ -15,7 +15,7 @@ function getConfigFromURL() {
   return {
     method: urlParams.get("method") || "tavatar",
     subject: urlParams.get("subject") || "people-m3c",
-    pose: urlParams.get("pose") || "canonical",
+    pose: urlParams.get("pose") || "t-pose",
     rand: urlParams.get("rand") === "true",
     folder: urlParams.get("folder") || "default-folder",
     z: 0,
@@ -26,6 +26,9 @@ function getConfigFromURL() {
 // 当前配置
 let currentConfig = getConfigFromURL();
 
+// 标记是否正在加载场景
+let isLoadingScene = false;
+
 // GUI控制函数
 window.toggleGUI = function () {
   const gui = document.getElementById("compactGui");
@@ -34,6 +37,36 @@ window.toggleGUI = function () {
 
 // 新增函数：更新GUI状态
 function updateGUIState() {
+  // 同步 method 选择器状态
+  const methodSelect = document.getElementById("methodSelect");
+  if (methodSelect) {
+    methodSelect.value = currentConfig.method;
+  }
+
+  // 更新区域显示/隐藏
+  updateSectionVisibility();
+
+  // 同步 subject 选择器状态
+  const subjectSelect = document.getElementById("subjectSelect");
+  if (
+    subjectSelect &&
+    subjectSelect.querySelector(`option[value="${currentConfig.subject}"]`)
+  ) {
+    subjectSelect.value = currentConfig.subject;
+  }
+
+  // 同步 pose 选择器状态
+  const poseSelect = document.getElementById("poseSelect");
+  if (poseSelect) {
+    poseSelect.value = currentConfig.pose;
+  }
+
+  // 同步 rand 复选框状态
+  const randCheckbox = document.getElementById("randCheckbox");
+  if (randCheckbox) {
+    randCheckbox.checked = currentConfig.rand;
+  }
+
   const pathConfig = getPath(currentConfig.method, currentConfig);
   const hasMesh = pathConfig && pathConfig.meshPath !== null;
 
@@ -231,6 +264,221 @@ window.toggleMeshFrame = function () {
   updateDisplayMode();
 };
 
+// 更新 URL 参数
+function updateURL() {
+  const params = new URLSearchParams();
+  params.set("method", currentConfig.method);
+  params.set("subject", currentConfig.subject);
+  params.set("pose", currentConfig.pose);
+  params.set("rand", currentConfig.rand.toString());
+
+  // 使用 replaceState 更新 URL 而不重新加载页面
+  const newURL = `${window.location.pathname}?${params.toString()}`;
+  window.history.replaceState({ path: newURL }, "", newURL);
+  console.log("URL updated:", newURL);
+}
+
+// 更新 subject 选项
+function updateSubjectOptions() {
+  const subjectSelect = document.getElementById("subjectSelect");
+  if (!subjectSelect) return;
+
+  const currentValue = subjectSelect.value;
+  let validSubjects = [];
+
+  if (currentConfig.method === "tavatar" || currentConfig.method === "ihuman") {
+    // tavatar/ihuman 方法使用 folder 格式的 subject
+    validSubjects = [
+      "male-3-casual",
+      "male-4-casual",
+      "female-3-casual",
+      "female-4-casual",
+    ];
+    subjectSelect.innerHTML = `
+      <option value="male-3-casual">male-3-casual</option>
+      <option value="male-4-casual">male-4-casual</option>
+      <option value="female-3-casual">female-3-casual</option>
+      <option value="female-4-casual">female-4-casual</option>
+    `;
+    // 设置默认值
+    if (!validSubjects.includes(currentValue)) {
+      subjectSelect.value = "male-3-casual";
+      currentConfig.subject = "male-3-casual";
+    }
+  } else if (currentConfig.method === "gart" || currentConfig.method === "gom") {
+    // gart/gom 只支持 people 系列
+    validSubjects = [
+      "people-m3c",
+      "people-m4c",
+      "people-f3c",
+      "people-f4c",
+    ];
+    subjectSelect.innerHTML = `
+      <option value="people-m3c">m3c</option>
+      <option value="people-m4c">m4c</option>
+      <option value="people-f3c">f3c</option>
+      <option value="people-f4c">f4c</option>
+    `;
+    // 设置默认值
+    if (!validSubjects.includes(currentValue)) {
+      subjectSelect.value = "people-m3c";
+      currentConfig.subject = "people-m3c";
+    }
+  }
+
+  // 更新 pose 选项（因为不同 subject 可能影响 pose）
+  updatePoseOptions();
+}
+
+// 更新 pose 选项
+function updatePoseOptions() {
+  const poseSelect = document.getElementById("poseSelect");
+  if (!poseSelect) return;
+
+  const currentValue = poseSelect.value;
+  let validPoses = [];
+  let poseOptions = "";
+
+  if (currentConfig.method === "tavatar" || currentConfig.method === "ihuman") {
+    // tavatar/ihuman 支持的 pose（基于 predict_20 文件夹内容）
+    validPoses = [
+      "aist_demo",
+      "balei1",
+      "balei2",
+      "dance1",
+      "dance2",
+      "da_pose_smpl",
+      "t_pose_smpl",
+    ];
+    poseOptions = `
+      <option value="aist_demo">aist_demo</option>
+      <option value="balei1">balei1</option>
+      <option value="balei2">balei2</option>
+      <option value="dance1">dance1</option>
+      <option value="dance2">dance2</option>
+      <option value="da_pose_smpl">da_pose_smpl</option>
+      <option value="t_pose_smpl">t_pose_smpl</option>
+    `;
+  } else if (currentConfig.method === "gart") {
+    // gart 支持所有 pose 包括 da-pose
+    validPoses = ["aist_demo", "eval", "t-pose", "da-pose"];
+    poseOptions = `
+      <option value="aist_demo">aist_demo</option>
+      <option value="eval">eval</option>
+      <option value="t-pose">t-pose</option>
+      <option value="da-pose">da-pose</option>
+    `;
+  } else if (currentConfig.method === "gom") {
+    // gom 只支持 aist_demo 和 eval
+    validPoses = ["aist_demo", "eval"];
+    poseOptions = `
+      <option value="aist_demo">aist_demo</option>
+      <option value="eval">eval</option>
+    `;
+  }
+
+  poseSelect.innerHTML = poseOptions;
+
+  // 设置默认值
+  if (!validPoses.includes(currentValue)) {
+    poseSelect.value = "aist_demo";
+    currentConfig.pose = "aist_demo";
+  }
+}
+
+// 更新区域显示/隐藏
+function updateSectionVisibility() {
+  const subjectPoseSection = document.getElementById("subjectPoseSection");
+
+  // 所有方法都显示 subject/pose 选择
+  if (subjectPoseSection) subjectPoseSection.style.display = "block";
+
+  // 更新 subject 和 pose 选项
+  updateSubjectOptions();
+  // updatePoseOptions 会在 updateSubjectOptions 中调用
+}
+
+
+
+window.changeMethod = function () {
+  if (isLoadingScene) {
+    console.log("Scene is loading, please wait...");
+    return;
+  }
+
+  const selectedMethod = document.getElementById("methodSelect").value;
+  console.log("Method changed to:", selectedMethod);
+
+  // 更新配置
+  currentConfig.method = selectedMethod;
+
+  // 更新区域显示
+  updateSectionVisibility();
+
+  // 更新 URL
+  updateURL();
+
+  // 重新加载场景
+  reloadScene();
+};
+
+window.changeSubject = function () {
+  if (isLoadingScene) {
+    console.log("Scene is loading, please wait...");
+    return;
+  }
+
+  const selectedSubject = document.getElementById("subjectSelect").value;
+  console.log("Subject changed to:", selectedSubject);
+
+  // 更新配置
+  currentConfig.subject = selectedSubject;
+
+  // 更新 URL
+  updateURL();
+
+  // 重新加载场景
+  reloadScene();
+};
+
+window.changePose = function () {
+  if (isLoadingScene) {
+    console.log("Scene is loading, please wait...");
+    return;
+  }
+
+  const selectedPose = document.getElementById("poseSelect").value;
+  console.log("Pose changed to:", selectedPose);
+
+  // 更新配置
+  currentConfig.pose = selectedPose;
+
+  // 更新 URL
+  updateURL();
+
+  // 重新加载场景
+  reloadScene();
+};
+
+window.toggleRand = function () {
+  if (isLoadingScene) {
+    console.log("Scene is loading, please wait...");
+    return;
+  }
+
+  const isRandEnabled = document.getElementById("randCheckbox").checked;
+  console.log("Rand toggled to:", isRandEnabled);
+
+  // 更新配置
+  currentConfig.rand = isRandEnabled;
+
+  // 更新 URL
+  updateURL();
+
+  // 重新加载场景
+  reloadScene();
+};
+
 window.toggleAutoRotation = function () {
   if (typeof window.autoRotate !== "undefined") {
     const isEnabled = document.getElementById("autoRotate").checked;
@@ -296,6 +544,7 @@ console.log("Current config:", currentConfig);
 // 初始化场景
 function initScene() {
   scene = new THREE.Scene();
+  scene.background = new THREE.Color("#fff");
   setupLighting();
 
   const pathConfig = getPath(currentConfig.method, currentConfig);
@@ -354,6 +603,10 @@ function setupLighting() {
   const pointLight = new THREE.PointLight(0xffffff, 0.5, 50);
   pointLight.position.set(5, 8, 5);
   scene.add(pointLight);
+
+  const pointLight2 = new THREE.PointLight(0xffffff, 0.5, 50);
+  pointLight2.position.set(-5, -8, -5);
+  scene.add(pointLight2);
 }
 
 // 加载mesh
@@ -386,9 +639,9 @@ function loadMesh(meshPath, rotation) {
 
           // 设置wireframe材质
           wireframeMesh.material = new THREE.MeshBasicMaterial({
-            color: 0xffffff,
+            color: 0x00000,
             wireframe: true,
-            wireframeLinewidth: 3,
+            wireframeLinewidth: 2,
           });
 
           wireframeMesh.material.needsUpdate = true;
@@ -553,6 +806,69 @@ function initViewer(
     });
 }
 
+// 重新加载场景
+function reloadScene() {
+  if (isLoadingScene) {
+    console.log("Scene is already loading, please wait...");
+    return;
+  }
+
+  isLoadingScene = true;
+  console.log("Reloading scene with config:", currentConfig);
+
+  // 清理现有的viewer和mesh
+  if (viewer) {
+    try {
+      viewer.dispose();
+    } catch (e) {
+      console.warn("Error disposing viewer:", e);
+    }
+    viewer = null;
+  }
+
+  if (currentMesh) {
+    scene.remove(currentMesh);
+    currentMesh = null;
+  }
+
+  // 保存当前的相机位置和显示模式
+  const currentDisplayMode =
+    document.querySelector('input[name="displayMode"]:checked')?.value ||
+    "3dgs";
+  const autoRotateEnabled =
+    document.getElementById("autoRotate")?.checked || false;
+
+  // 短暂延迟后重新初始化场景
+  setTimeout(() => {
+    initScene();
+
+    // 恢复显示模式
+    const modeRadio = document.getElementById(
+      `display${
+        currentDisplayMode === "3dgs"
+          ? "3DGS"
+          : currentDisplayMode === "3dgs-ellipsoid"
+          ? "3DGSEllipsoid"
+          : currentDisplayMode === "mesh"
+          ? "Mesh"
+          : currentDisplayMode === "mesh-frame"
+          ? "MeshFrame"
+          : "Combo"
+      }`
+    );
+    if (modeRadio) {
+      modeRadio.checked = true;
+    }
+
+    // 恢复自动旋转状态
+    if (document.getElementById("autoRotate")) {
+      document.getElementById("autoRotate").checked = autoRotateEnabled;
+    }
+
+    isLoadingScene = false;
+  }, 100);
+}
+
 // 页面加载时初始化
 document.addEventListener("DOMContentLoaded", function () {
   // 设置显示控制初始状态 - 默认选择3DGS
@@ -592,6 +908,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 初始化时更新GUI状态
   updateGUIState();
+
+  // 添加键盘监听器：按 c 键切换 Control Panel 显示/隐藏
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "c" || event.key === "C") {
+      const gui = document.getElementById("compactGui");
+      if (gui) {
+        gui.classList.toggle("hidden");
+        console.log(
+          "Control Panel toggled:",
+          gui.classList.contains("hidden") ? "hidden" : "visible"
+        );
+      }
+    }
+  });
 
   initScene();
 });

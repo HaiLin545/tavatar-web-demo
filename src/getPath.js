@@ -1,34 +1,24 @@
-// GUI-only configuration, no URL parameters
-// 获取basename，考虑vite配置中的base路径
-const getBaseName = () => {
-  // 在生产环境中使用vite的base配置，开发环境为空
-  if (
-    location.hostname.includes("luohailin.top") ||
-    location.hostname == "localhost"
-  )
-    return "";
-  return import.meta.env.MODE === "production" ? "/w/tavatar" : "/w/tavatar";
-};
+function getBaseName() {
+  return "/w/tavatar";
+}
 
 export default function getPath(methodName, params = {}) {
   console.log("getPath methodName:", methodName);
   console.log("getPath params:", params);
 
   if (methodName === "tavatar") {
-    return getTavatarPath(params, "tavatar");
+    // tavatar 方法统一使用 folder 路径
+    return getFolderPath({ ...params, folder: "tavatar" });
+  }
+  if (methodName === "ihuman") {
+    // ihuman 方法统一使用 folder 路径，对应 baseline
+    return getFolderPath({ ...params, folder: "baseline" });
   }
   if (methodName === "gart") {
     return getGartPath(params);
   }
   if (methodName === "gom") {
     return getGomPath(params);
-  }
-  if (methodName === "ihuman") {
-    return getTavatarPath(params, "ihuman");
-  }
-
-  if (methodName === "folder") {
-    return getFolderPath(params);
   }
 
   console.error("Unknown method:", methodName);
@@ -47,6 +37,9 @@ export function getTavatarPath(params = {}, settings = "ihuman") {
     "t-pose": "final",
     eval: "0",
   };
+
+  // 判断是否为 xavatar 系列
+  const isXavatar = subject.startsWith("xavatar-");
 
   const poseCameraMap = {
     aist_demo: {
@@ -70,9 +63,17 @@ export function getTavatarPath(params = {}, settings = "ihuman") {
     rotation = [0, 0, 0, 0]; // t-pose使用默认rotation
   }
 
+  // 根据是否为 xavatar 设置不同的路径格式
+  const meshPath = isXavatar
+    ? `${baseName}/assets/${settings}/${subject}/canonical_mesh_${epoch}.obj`
+    : `${baseName}/assets/${settings}/${subject}/${pose}/canonical_mesh_${epoch}.obj`;
+  const plyPath = isXavatar
+    ? `${baseName}/assets/${settings}/${subject}/render_${epoch}${type}.ply`
+    : `${baseName}/assets/${settings}/${subject}/${pose}/render_${epoch}${type}.ply`;
+
   return {
-    meshPath: `${baseName}/assets/${settings}/${subject}/${pose}/canonical_mesh_${epoch}.obj`,
-    plyName: `${baseName}/assets/${settings}/${subject}/${pose}/render_${epoch}${type}.ply`,
+    meshPath: meshPath,
+    plyName: plyPath,
     initialCameraPosition: poseCameraMap[pose]?.initialCameraPosition || [
       -0.15752, 0.64824, -0.17046,
     ],
@@ -168,17 +169,56 @@ export function getGartPath(params = {}) {
 }
 
 export function getFolderPath(params = {}) {
-  const baseName = getBaseName();
-  const folder = params.folder || "default-folder";
+  let baseName = getBaseName();
+  const folder = params.folder || "tavatar";
   let isRand = params.rand || false;
-  // let pose = params.pose || "canonical";
+  let subject = params.subject || "male-3-casual"; // male-3-casual || male-4-casual ....
+  let pose = params.pose || "aist_demo"; // aist_demo, eval, etc.
 
   let plyName = isRand ? `gaussians_rand.ply` : `gaussians.ply`;
+  let path = `${baseName}/assets/folders/${folder}/people_snapshot/${subject}/predict_20/${pose}/`;
+
+  const poseCameraMap = {
+    balei1: {
+      initialCameraPosition: [-0.41538, 1.25481, -1.70498],
+      initialCameraLookAt: [0.19101, 0.22705, 0.39242],
+      rotation: [0, 0, -1, 0],
+    },
+    balei2: {
+      initialCameraPosition: [0.48941, 0.57829, -1.90849],
+      initialCameraLookAt: [-0.08468, 0.4025, 0.18494],
+      rotation: [0, 0, -1, 0],
+    },
+    dance1: {
+      initialCameraPosition: [1.55469, 0.4279, 0.95851],
+      initialCameraLookAt: [0.22961, 0.24553, -0.06652],
+      rotation: [0, 0, -1, 0],
+    },
+    dance2: {
+      initialCameraPosition: [0.12865, -0.72415, -1.42647],
+      initialCameraLookAt: [0.00747, 0.01017, 0.12764],
+      rotation: [0, 0, -1, 0],
+    },
+    aist_demo: {
+      initialCameraPosition: [0.09622, 0.55923, -1.88727],
+      initialCameraLookAt: [0.07587, 0.21077, 0.2624],
+      rotation: [0, 0, -1, 0],
+    },
+    da_pose_smpl: {
+      initialCameraPosition: [-0.29201, 0.51159, 0.58536],
+      initialCameraLookAt: [-0.06298, 0.2859, -0.08301],
+    },
+  };
 
   return {
-    plyName: `${baseName}/assets/folders/${folder}/${plyName}`,
-    meshPath: `${baseName}/assets/folders/${folder}/mesh.obj`,
-    initialCameraPosition: [-0.00402, 0.30982, 1.57279],
-    initialCameraLookAt: [0.02659, -0.12982, 0.19683],
+    plyName: `${path}/${plyName}`,
+    meshPath: `${path}/mesh.obj`,
+    initialCameraPosition: poseCameraMap[pose]?.initialCameraPosition || [
+      -0.00402, 0.30982, 1.57279,
+    ],
+    initialCameraLookAt: poseCameraMap[pose]?.initialCameraLookAt || [
+      0.02659, -0.12982, 0.19683,
+    ],
+    rotation: poseCameraMap[pose]?.rotation || [0, 0, 0, 0],
   };
 }
